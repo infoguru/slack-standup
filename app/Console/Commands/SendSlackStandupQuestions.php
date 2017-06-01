@@ -26,11 +26,18 @@ class SendSlackStandupQuestions extends Command
     {
         parent::__construct();
 
+        $hook = env("SLACK_INCOMING_HOOK_URL", false);
+
+        if(!$hook)
+        {
+            return;
+        }
+
         $this->settings["username"] = env("SLACK_INCOMING_USERNAME", "bot");
 
         $this->settings["channel"] = env("SLACK_CHANNEL", "#general");
 
-        $this->slack = new SlackClient(env("SLACK_INCOMING_HOOK_URL"), $this->settings);
+        $this->slack = new SlackClient($hook, $this->settings);
 
     }
 
@@ -42,22 +49,9 @@ class SendSlackStandupQuestions extends Command
     public function handle()
     {
 
-        $format = env("SLACK_QUESTION");
-
-        $nicks = explode(",", env("SLACK_NICKS"));
-
-        shuffle($nicks);
-
-        foreach($nicks AS $nick)
-        {
-            $msg = sprintf($format, $nick);
-
-            sleep(5);
-
-            $this->slack->send($msg);
-        }
-
-
+        $msg = env("SLACK_QUESTION");
+     
+        $this->slack->send($msg);
 
     }
 }

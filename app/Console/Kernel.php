@@ -24,6 +24,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('slack:standup')->weekdays()->dailyAt('10:00')->withoutOverlapping();
+        $schedule->command('slack:standup')->weekdays()->dailyAt('8:30')->withoutOverlapping();
     }
 }
